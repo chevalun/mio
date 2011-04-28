@@ -2,7 +2,7 @@ classdef ClassifierEval
     % class for classifier evaluation
     
     properties
-        error_rate
+        accuracy
         training_time
         testing_time
     end
@@ -17,7 +17,7 @@ classdef ClassifierEval
             obj.testing_time = toc;
             [nsamples, ~]= size(test.gnd);
             [ncorrect, ~] = size(find(rst == test.gnd));
-            obj.error_rate = ncorrect / nsamples;
+            obj.accuracy = ncorrect / nsamples;
         end
     end
     
