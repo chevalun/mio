@@ -20,18 +20,18 @@ classdef KMeansModel < ClusterModel
                 for p = 1:obj.n
                     dis = zeros(obj.k, 1);
                     for c = 1:obj.k
-                        dis(c) = (ctrs(c)-obj.fea(p)).^2;
+                        dis(c,:) = sum((ctrs(c,:)-obj.fea(p,:)).^2);
                     end
                     [~, idx(p)] = min(dis);
                 end
                 ctrs = zeros(obj.k, obj.m);
                 num = zeros(obj.k, 1);
                 for p = 1:obj.n
-                    ctrs(idx(p)) = ctrs(idx(p)) + obj.fea(p);
+                    ctrs(idx(p),:) = ctrs(idx(p),:) + obj.fea(p,:);
                     num(idx(p)) = num(idx(p)) + 1;
                 end
                 for i = 1:obj.k
-                    ctrs(i) = ctrs(i) / num(i);
+                    ctrs(i,:) = ctrs(i,:) / num(i);
                 end
             end
         end
