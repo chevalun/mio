@@ -18,12 +18,14 @@ classdef KMedoidsModel < ClusterModel
             ctrs = obj.fea(randsample(obj.n, obj.k),:);
             pdis = zeros(obj.n, obj.n);
             for i = 1:obj.n
-                for j = 1:obj.n
+                for j = i:obj.n
                     pdis(i,j) = sum((obj.fea(i,:)-obj.fea(j,:)).^2);
+                    pdis(j,i) = pdis(i,j);
                 end
             end
-            for t = 1:obj.maxIter
-                fprintf('%i\n', t);
+            t = 0;
+            oidx = zeros(obj.n, 1);
+            while true
                 for p = 1:obj.n
                     dis = zeros(obj.k, 1);
                     for c = 1:obj.k
@@ -31,9 +33,13 @@ classdef KMedoidsModel < ClusterModel
                     end
                     [~, idx(p)] = min(dis);
                 end
+                t = t + 1;
+                if t > obj.maxIter || isequal(idx, oidx)
+                    break;
+                end
+                oidx = idx;
                 ctrs = zeros(obj.k, obj.m);
                 cdis = Inf(obj.k, 1);
-                fprintf('%i\n', t);
                 for c = 1:obj.k
                     pts = find(idx == c);
                     [sz ~] = size(pts);

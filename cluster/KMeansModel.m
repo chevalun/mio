@@ -16,7 +16,9 @@ classdef KMeansModel < ClusterModel
         function idx = cluster(obj)
             idx = zeros(obj.n, 1);
             ctrs = obj.fea(randsample(obj.n, obj.k),:);
-            for t = 1:obj.maxIter
+            t = 0;
+            oidx = zeros(obj.n, 1);
+            while true
                 for p = 1:obj.n
                     dis = zeros(obj.k, 1);
                     for c = 1:obj.k
@@ -24,6 +26,11 @@ classdef KMeansModel < ClusterModel
                     end
                     [~, idx(p)] = min(dis);
                 end
+                t = t + 1;
+                if t > obj.maxIter || isequal(idx, oidx)
+                    break;
+                end
+                oidx = idx;
                 ctrs = zeros(obj.k, obj.m);
                 num = zeros(obj.k, 1);
                 for p = 1:obj.n
